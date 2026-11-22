@@ -15,7 +15,32 @@ the same computer.
 
 ## 2. Start a Game
 
-From the project directory, run either implementation:
+### Recommended: use the launcher
+
+From the project directory, run:
+
+```text
+python play_ludo.py
+```
+
+Choose the Object-oriented or Function-based version when prompted. The game
+then asks for the mode (unless supplied on the command line), number of
+players, and names. The launcher checks for Python 3.11+ and needs no package
+installation.
+
+You can select a version and pass game options directly:
+
+```text
+python play_ludo.py --engine oop --mode quick --seed 42
+python play_ludo.py --engine functional --mode classic --no-color
+```
+
+`--engine` may be `oop` or `functional`. If it is omitted, the launcher asks
+which version to run.
+
+### Run an implementation directly
+
+You can also bypass the launcher and run either implementation:
 
 ```text
 python v1_initial/ludo_oop.py
@@ -51,6 +76,14 @@ python v1_initial/ludo_oop.py --mode quick --seed 42 --max-turns 20 --no-color
 
 The `--seed` option does not choose moves for you; it only makes the die rolls
 repeatable. For identical play, players must also make the same choices.
+
+### Are there colors?
+
+Yes. The game uses ANSI terminal colors for the mode heading, player names,
+and winner banner. Colors are enabled by default. They display in terminals
+that support ANSI escape codes, including modern Windows Terminal and VS Code
+terminals. Use `--no-color` if colors do not display correctly or you prefer
+plain text.
 
 ## 3. The Board and Tokens
 

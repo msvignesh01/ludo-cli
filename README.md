@@ -4,6 +4,14 @@ This package contains the complete, phase-by-phase engineering specification, ag
 
 For player setup, controls, and game rules, see the [User Manual](docs/USER_MANUAL.md).
 
+## Play the Game
+
+With Python 3.11+ installed, run `python play_ludo.py` from this folder. The
+launcher lets you choose the OOP or function-based version, then the game asks
+for the mode, player count, and names. Game options such as `--mode quick`,
+`--seed 42`, and `--no-color` can be passed through the launcher. Colors are on
+by default in ANSI-compatible terminals; add `--no-color` to turn them off.
+
 ## How to Run with Any AI Coding Agent (Claude Code, Codex, Cursor, Antigravity)
 
 1. Unzip this folder into your working repository directory (`ludo-cia1/`).
