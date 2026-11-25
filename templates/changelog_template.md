@@ -1,22 +1,35 @@
-# Changelog — `v1_initial` to `v2_final`
+# Changelog Template — Peer-Driven v2
 
-All changes below were driven by peer testing feedback from **Peer Team 1** and **Peer Team 2**, applied symmetrically to **both** `v2_final/ludo_oop.py` and `v2_final/ludo_func.py`, and verified with regression tests and the 1,000-game parity suite.
+Use this file only after genuine peer feedback produces accepted v2 changes.
+Copy it to `v2_final/CHANGELOG.md` and replace every placeholder with real
+evidence. Do not prefill pass results.
 
----
+## Source Reports
 
-## Summary of Changes
+- **Peer Team 1 report:** [Path and date]
+- **Peer Team 2 report:** [Path and date]
+- **Accepted findings:** [IDs]
+- **Rejected/deferred findings and reasons:** [IDs and reasons]
 
-| ID | Source | Type | Issue / Suggestion | Fix Applied (Both OOP & Functional) | Regression Test |
-|---|---|---|---|---|---|
-| CHG-01 | Peer Team 1 | Bug / UX | *(Fill from Team 1 report)* | *(Exact change in both files)* | `test_...` |
-| CHG-02 | Peer Team 1 | UX | *(Fill from Team 1 report)* | *(Exact change in both files)* | `test_...` |
-| CHG-03 | Peer Team 2 | Bug / UX | *(Fill from Team 2 report)* | *(Exact change in both files)* | `test_...` |
-| CHG-04 | Peer Team 2 | UX | *(Fill from Team 2 report)* | *(Exact change in both files)* | `test_...` |
+## Changes
 
----
+| ID | Source report | Severity/type | Observed issue | OOP change | Functional change | Regression test |
+|---|---|---|---|---|---|---|
+| CHG-01 | [Report/finding] | [Enter] | [Real reproduction] | [File/method] | [File/function] | [Test name] |
 
-## Parity & Quality Verification After `v2_final` Changes
-- **AST Zero-Class Gate (`v2_final/ludo_func.py`):** PASS (0 classes)
-- **Unit & Regression Tests (`testing/test_suite.py`):** PASS (`X / X` tests)
-- **1,000-Game Seeded Parity Fuzz (`testing/parity_test.py`):** PASS (`1,000 / 1,000` identical)
-- **Subprocess CLI Transcript Diff:** PASS (0-line diff under `--no-color`)
+## Verification
+
+Record only observed commands and results:
+
+- **Command:** `python scripts/verify_gates.py --stage v2`
+- **Exit code:** [Enter]
+- **Unit/regression tests:** [Enter count and result]
+- **Parity games and snapshots:** [Enter measured result]
+- **Subprocess CLI result:** [Enter measured result]
+- **AST/import audit:** [Enter measured result]
+- **Failures and warnings:** [Enter measured result]
+
+## Baseline Preservation
+
+- **v1 handoff date:** [Enter]
+- **Evidence v1 remained unchanged:** [Enter comparison method/result]

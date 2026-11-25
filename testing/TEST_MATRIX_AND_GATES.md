@@ -1,72 +1,149 @@
-# Exhaustive Test Matrix & Perfection Gates
+# Exhaustive Test Matrix & Verification Gates
 
-Every test listed below MUST be implemented in `testing/test_suite.py` and `testing/parity_test.py` and executed against **BOTH** `ludo_oop.py` and `ludo_func.py`.
+The current v1 implementation is modular. `testing/test_suite.py` discovers every
+`testing/test_*.py` module except itself and `parity_test.py`; the parity suite is
+run separately so its long deterministic matrix remains visible. Every behavioral
+test exercises the real OOP and functional implementations, not mocked rule logic.
 
----
+## 1. Automated Unit and Edge-Case Suite
 
-## 1. Unit & Rule Edge-Case Matrix (`testing/test_suite.py`)
+Run from the repository root:
 
-| ID | Category | Scenario | Exact Assertion |
-|---|---|---|---|
-| T01 | Presets | Quick Mode config | `track_len=28, home_len=4, tokens=2, home_finish=31, safe_tiles={0,7,14,21}` |
-| T02 | Presets | Classic Mode config | `track_len=52, home_len=5, tokens=4, home_finish=56, safe_tiles={0,8,13,21,26,34,39,47}` |
-| T03 | Seating | 2P Diagonal Seating | Quick starts `[0, 14]`; Classic starts `[0, 26]` |
-| T04 | Seating | 3P & 4P Clockwise Seating | Quick 3P `[0, 7, 14]`, 4P `[0, 7, 14, 21]`; Classic 4P `[0, 13, 26, 39]` |
-| T05 | Unlock | Base Exit Blocked on 1–5 | Token at `steps=-1` has `valid_moves == []` for rolls `1,2,3,4,5` |
-| T06 | Unlock | Base Exit Allowed on 6 | Token at `steps=-1` unlocks to `steps=0` on roll `6`, awards bonus turn |
-| T07 | Wrap | Circular Outer Track Modulo | Player at `start_index=14` (Quick) with `steps=13` -> `T27`; `steps=14` -> `T00` |
-| T08 | Home | Private Home Entry | Quick: `steps=26 + roll=1 -> steps=27 (H1)`, `global_pos is None` |
-| T09 | Home | Exact Finish & Overshoot | Quick: `steps=29` allows roll `1` (`H4`) and `2` (`HOME`), rejects rolls `3,4,5,6` |
-| T10 | Capture | Non-Safe Single Capture | Opponent at same non-safe `global_pos` resets to `-1`, mover gets `bonus_turn=True`, `captures_made += 1` |
-| T11 | Capture | Non-Safe Multi-Token Stack Capture | 2 stacked opponent tokens on non-safe tile BOTH reset to `-1`, `captures_made += 2` |
-| T12 | Safe | Safe Tile Immunity | Landing on opponent sitting on `★` tile (`0, 7, 14, 21` in Quick; `8, 21, 34, 47` in Classic) triggers NO capture and NO bonus roll (unless rolled 6) |
-| T13 | Stacking | Same-Color Friendly Stack | Moving friendly token onto own token does NOT capture own token; opponent can pass over it |
-| T14 | Bonus | Home-Finish Bonus Roll | Moving token into `HOME` on roll `2` grants `bonus_turn=True` and resets `consecutive_sixes=0` |
-| T15 | Bonus | Non-Stacking Bonus Rule | Rolling `6` AND capturing grants 1 bonus roll; next non-6 non-capture move passes turn immediately |
-| T16 | Penalty | Triple Consecutive Sixes | 1st six -> plays; 2nd six -> plays; 3rd six -> `TRIPLE_SIX_FORFEIT`, move skipped, `consecutive_sixes=0`, turn advances |
-| T17 | Penalty | Six-Streak Reset on Non-6 Capture | Roll `6` -> Roll `4` (captures -> bonus roll) -> Roll `6` -> Roll `6` -> NOT a triple-6 forfeit because roll `4` reset streak! |
-| T18 | Auto-Skip | Roll 6 with No Legal Move | Only remaining token at `steps=30` (needs `1`), rolls `6` -> auto-skips, `consecutive_sixes=0`, turn advances |
-| T19 | Win | Immediate Victory | Moving last token to `home_finish` sets `status="WON"`, `winner_index=player_idx`, `bonus_turn=False` |
-| T20 | Draw | Max-Turn Cap Trigger | Reaching `turn_count == max_turns` sets `status="DRAW"`, `draw_reason="Maximum turn limit reached"` |
-| T21 | Draw | Mutual Draw Accepted & Declined | All `y` -> `status="DRAW"`, `draw_reason="Mutual agreement"`; any `n` -> resumes active player without advancing turn |
-| T22 | CLI | Invalid Inputs Resilience | Non-ints, empty strings, out-of-range choices, negative numbers never crash CLI |
-| T23 | CLI | `--no-color` Purity | Output contains zero `\033[` escape sequences |
-| T24 | CLI | Invalid `--max-turns 0` | Exits non-zero cleanly via argparse error |
+```text
+python testing/test_suite.py
+```
 
----
+The aggregate currently collects **86 tests**. The coverage is divided as follows.
 
-## 2. Automated Parity Fuzz Suite (`testing/parity_test.py`)
+| Test module | Count | Required coverage |
+|---|---:|---|
+| `test_automation.py` | 11 | Deterministic bot priorities and tie-breaking; exact OOP/functional bot-event parity; gameplay/code/both/off commentary safety |
+| `test_cli_runtime.py` | 7 | Runtime command switching, four-bot autoplay, mixed human/bot draw, renderer equality, ANSI stripping, quit confirmation |
+| `test_cli_setup.py` | 8 | CLI-over-JSON/wizard precedence, JSON geometry validation, names and seats, complete flag surface, safe input helpers |
+| `test_contracts.py` | 9 | Quick/Classic/Showcase/Classic profiles, allowed overrides, locked geometry, invalid values, JSON round trip, events, 2P/3P/4P seating |
+| `test_gui_drawing.py` | 7 | Board/token drawing, stack offsets, coordinates, colors, move descriptions |
+| `test_gui_geometry.py` | 5 | Quick 9×9 and Classic 15×15 geometry, route adjacency, home lanes, diagonal yards, JSON serialization |
+| `test_gui_session.py` | 14 | Human roll/select, bot scheduling, autoplay, pause/step, speed, commentary, terminal controls, short controller parity |
+| `test_rules.py` | 20 | All movement, capture, blockade, bonus, penalty, draw, win, podium, and snapshot-isolation rules listed below |
+| `test_wizard.py` | 5 | Showcase defaults, EOF cancellation, existing-value precedence, mixed seat setup |
 
-### A. 1,000-Game Headless Engine Parity Fuzzing
-Run across all 6 configurations:
-- `quick` x 2P (200 games)
-- `quick` x 3P (200 games)
-- `quick` x 4P (200 games)
-- `classic` x 2P (150 games)
-- `classic` x 3P (150 games)
-- `classic` x 4P (100 games)
+### Rule and edge-case assertions
 
-For every game `seed`:
-1. Initialize both `LudoGame` (OOP) and `create_game_state` (Functional) with the exact same `mode`, `player_names`, `max_turns`, and `seed`.
-2. On every roll:
-   - Assert `oop_roll == func_roll`.
-   - Assert `oop_roll_res == func_roll_res`.
-   - If moves are available, pick a deterministic move index using a shared test RNG (`choice_idx`), assert `oop.preview_move(...) == func.preview_move(...)`, then call `apply_move(...)` on both.
-   - Assert `oop.export_canonical_state() == func.export_canonical_state(state)` **after every single action**.
-3. Assert both games terminate in the exact same status (`WON` or `DRAW`), same `winner_index`, same `draw_reason`, and same `turn_count`.
+| ID | Scenario | Assertion |
+|---|---|---|
+| R01 | Preset geometry | Quick has 28 track cells, 4 home cells, finish 31, safe `[0,7,14,21]`; Classic has 52, 5, 56, safe `[0,8,13,21,26,34,39,47]` |
+| R02 | Seating | 2P uses diagonal starts; 3P/4P use clockwise starts for both modes |
+| R03 | Base unlock | A base token moves only on a 6 and enters at its configured start tile |
+| R04 | Exact home | Exact-finish moves are legal; overshoots are rejected |
+| R05 | Non-exact home | When disabled, an otherwise legal move clamps to `home_finish` |
+| R06 | Outer wrap | Player-relative outer steps map around the configured track correctly |
+| R07 | Kill-to-Enter | Before the first capture, a token at `track_len - 2` wraps modulo `track_len - 1`; the first capture unlocks private-home entry |
+| R08 | Private home | Home-lane tokens have no shared global position and cannot be captured |
+| R09 | Single capture | All opponent tokens on a non-safe landing tile reset to base; captures and bonus follow configuration |
+| R10 | Stack capture | With blockades disabled, every opponent token in a non-safe landing stack is captured |
+| R11 | Safe tile | Safe landings never capture; disabling safe tiles also removes starting-tile immunity |
+| R12 | Friendly stack | Friendly tokens coexist and are never captured by their own player |
+| R13 | No blockades | Opponents may pass over and capture a same-color stack |
+| R14 | Strict blockade | A two-token opponent stack blocks both landing and every crossed intermediate outer tile |
+| R15 | Safe-pair blockade | Opponents may pass over a pair, but a single token cannot capture the pair |
+| R16 | Bonus independence | Capture and home bonus toggles work independently; six remains a bonus |
+| R17 | Non-stacking bonus | A six plus capture or home grants exactly one extra roll |
+| R18 | Six-streak reset | A home bonus resets the consecutive-six streak; a non-six capture also resets it before later sixes |
+| R19 | Triple six | The third consecutive six is voided, the streak resets, and the turn advances; disabling the rule permits the move |
+| R20 | Auto-skip | No legal move resets the streak and advances, including a six with no legal move |
+| R21 | Immediate 2P win | In two-player matches the first player to finish all tokens wins immediately |
+| R22 | Podium | In 3P/4P podium matches play continues until only one unfinished player remains; finished players are skipped |
+| R23 | Turn-cap draw | Reaching `max_turns` produces the canonical maximum-turn draw state |
+| R24 | Mutual draw | Acceptance preserves turn count and records `Mutual agreement`; decline does not advance play |
+| R25 | Snapshot isolation | Mutating an exported snapshot cannot change config, tokens, or event history in either engine |
+| R26 | Initial parity | Initial canonical states and events match exactly |
+| R27 | Bad CLI values | Non-integers, huge values, negatives, blanks, malformed commands, EOF, and interruption do not crash the CLI |
+| R28 | ANSI purity | `--no-color` output contains no escape sequence; ANSI stripping removes real sequences cleanly |
+| R29 | GUI controls | Human/bot/autoplay ownership, pause, step, speed, commentary, draw, and quit match across controllers |
+| R30 | JSON and precedence | JSON settings are validated, geometry is locked, and CLI values override JSON/wizard/defaults |
 
-### B. End-to-End Subprocess CLI Transcript Parity
-Run both `ludo_oop.py` and `ludo_func.py` via `subprocess.run([sys.executable, script, "--mode", ..., "--seed", ..., "--no-color"], input=scripted_stdin, text=True, capture_output=True)`:
-- **Transcript 1:** Quick 2P full game to win, injecting invalid menu inputs (`abc`, `99`, `-1`, empty space) mid-game.
-- **Transcript 2:** Quick 3P max-turn draw (`--max-turns 4`).
-- **Transcript 3:** Quick 2P mutual `draw` declined once (`n`), then accepted (`y`).
-- **Transcript 4:** Classic 4P multi-turn playthrough + graceful `quit` confirmed (`y`).
-- **Assertion:** `oop_proc.returncode == func_proc.returncode == 0` AND `oop_proc.stdout == func_proc.stdout` (100% identical CLI output!).
+## 2. Full-Game Deterministic Parity Matrix
 
----
+Run from the repository root:
 
-## 3. Static & Structural Gates (`scripts/verify_gates.py`)
-1. **Zero-Class AST Gate (`ludo_func.py`):** Count of `ast.ClassDef` nodes MUST equal `0`.
-2. **OOP Class Gate (`ludo_oop.py`):** Must define at least `Token`, `Player`, `Board`, `CLIRenderer`, `LudoGame`.
-3. **Stdlib-Only Import Gate:** Every imported module across `ludo_oop.py` and `ludo_func.py` MUST be in `sys.stdlib_module_names`.
-4. **Submission Completeness Gate (`--stage final`):** Verifies all 8 submission deliverables exist and contain zero `TODO` or `TBD` placeholders.
+```text
+python testing/parity_test.py
+```
+
+The suite executes **1,080 complete games** with seeds `20001` through `21080`.
+For each game it compares canonical state initially, after every roll, after every
+bot decision, after every move, and at termination. It also compares dice rolls,
+move previews, move results, bot decisions, winner/draw fields, turn counts, and
+JSON serialization.
+
+| Mode | Players | Tokens | Profile | Blockades | Kill-to-Enter | Podium | Games | Turn cap |
+|---|---:|---:|---|---|---|---|---:|---:|
+| Quick | 2 | 2 | Classic | none | off | off | 120 | 60 |
+| Quick | 3 | 3 | Showcase | safe_pair | on | on | 120 | 60 |
+| Quick | 4 | 4 | Showcase | safe_pair | on | on | 120 | 60 |
+| Quick | 2 | 1 | Classic | strict | off | off | 120 | 60 |
+| Quick | 3 | 2 | Classic | strict | on | off | 120 | 60 |
+| Quick | 4 | 3 | Showcase | safe_pair | off | on | 120 | 60 |
+| Classic | 2 | 4 | Classic | none | off | off | 60 | 120 |
+| Classic | 3 | 4 | Showcase | safe_pair | on | on | 60 | 120 |
+| Classic | 4 | 4 | Showcase | safe_pair | on | on | 60 | 120 |
+| Classic | 2 | 1 | Classic | strict | off | off | 60 | 120 |
+| Classic | 3 | 2 | Classic | strict | on | off | 60 | 120 |
+| Classic | 4 | 3 | Showcase | safe_pair | off | on | 60 | 120 |
+
+The matrix deliberately includes both completed wins and turn-cap draws. A game
+that exceeds its safety-loop limit fails rather than being silently discarded.
+
+## 3. Real Subprocess CLI Parity
+
+Each case launches both `v1_initial/ludo_oop.py` and `v1_initial/ludo_func.py`
+with `subprocess.run`, scripted standard input, `--no-color`, and zero automation
+delay. Unless a case explicitly tests code narration, stdout and stderr must be
+byte-for-byte equal and both exit codes must be zero.
+
+| ID | Scenario | Additional assertion |
+|---|---|---|
+| C01 | Seeded complete Quick 2P win | Terminal winner is B and status is `WON` |
+| C02 | Seeded real capture | Transcript contains the capture and confirmed clean quit |
+| C03 | Invalid commands and quit confirmation | Three malformed commands are rejected; cancelled and confirmed quit both work |
+| C04 | Invalid token choices | Non-integer, huge, negative, blank, and illegal choices are handled without a crash |
+| C05 | Mutual draw declined then accepted | Decline resumes without advancing; acceptance records the canonical draw state |
+| C06 | Three bot seats to max-turn draw | Seat metadata and terminal `DRAW` status match |
+| C07 | Mixed human/bot seats under autoplay | Human/bot metadata is preserved while automation reaches the draw cap |
+| C08 | Four-bot JSON Showcase demo | JSON loads; CLI overrides cap, delay, and commentary; gameplay draw message appears |
+| C09 | Full setup wizard defaults and quit | Showcase defaults are selected and quit exits cleanly |
+| C10 | Mid-match code narration | Each process contains only its own real entry points; masking only those code traces yields identical gameplay output |
+| C11 | Closed standard input | EOF produces a polite clean quit and exit code zero |
+| C12 | Invalid `--max-turns 0` | Both CLIs reject the value before starting and exit non-zero |
+
+## 4. Static and Structural Gates
+
+Run:
+
+```text
+python scripts/verify_gates.py --stage v1
+```
+
+The verifier recursively audits every Python file in the selected stage and
+requires all of the following:
+
+1. Python source parses and contains no unfinished implementation markers.
+2. Every absolute import is from the standard library or the stage's own package.
+3. `ludo_func.py`, `func_ludo/`, and `shared/` contain **zero `ast.ClassDef` nodes**.
+4. `oop_ludo/` defines the required `Token`, `Player`, `Board`, `CLIRenderer`, and
+   `LudoGame` classes.
+5. Both launchers expose help and the required core flags.
+6. Both launchers reject `--max-turns 0` cleanly.
+7. The 86-test aggregate passes.
+8. The 1,080-game matrix and all subprocess cases pass.
+9. The final command exits zero with zero failures and zero warnings.
+
+`--stage v2` applies the same gates to the peer-feedback stage. `--stage final`
+also checks the complete documentation/deliverable set; it cannot honestly pass
+until genuine peer reports and the corresponding v2 fixes exist.
+
+## 5. Evidence Policy
+
+Observed command results, timestamps, and metrics belong in `TRACKER.md`. A test is
+not marked complete merely because it exists, and peer reports must never be
+filled with fabricated outcomes.

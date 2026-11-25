@@ -1,0 +1,22 @@
+{
+  "mode": "classic",
+  "profile": "classic",
+  "player_count": 2,
+  "tokens_per_player": 4,
+  "blockades": "none",
+  "kill_to_enter": false,
+  "podium_mode": false,
+  "exact_home_roll": true,
+  "triple_six_forfeit": true,
+  "safe_tiles_enabled": true,
+  "bonus_on_capture": true,
+  "bonus_on_home": true,
+  "max_turns": 250,
+  "seed": 42,
+  "auto_delay": 0.35,
+  "commentary": "gameplay",
+  "ui": "cli",
+  "names": ["Player 1", "Player 2"],
+  "kinds": ["human", "human"],
+  "autoplay": false
+}

@@ -1,0 +1,22 @@
+{
+  "mode": "quick",
+  "profile": "showcase",
+  "player_count": 4,
+  "tokens_per_player": 2,
+  "blockades": "safe_pair",
+  "kill_to_enter": true,
+  "podium_mode": true,
+  "exact_home_roll": true,
+  "triple_six_forfeit": true,
+  "safe_tiles_enabled": true,
+  "bonus_on_capture": true,
+  "bonus_on_home": true,
+  "max_turns": 100,
+  "seed": 42,
+  "auto_delay": 0.05,
+  "commentary": "both",
+  "ui": "cli",
+  "names": ["Red Bot", "Green Bot", "Yellow Bot", "Blue Bot"],
+  "kinds": ["bot", "bot", "bot", "bot"],
+  "autoplay": true
+}

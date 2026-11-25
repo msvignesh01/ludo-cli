@@ -1,46 +1,68 @@
-# Peer Testing Report — Team [1 / 2]
+# Peer Testing Report — Team 2
 
-- **Testing Team Name / Members:** [Name 1, Name 2, Name 3]
-- **Date Tested:** [YYYY-MM-DD]
-- **OS & Python Version:** [e.g., Windows 11, Python 3.11.x]
-- **Files Tested:** `v1_initial/ludo_oop.py` and `v1_initial/ludo_func.py`
+- **Team name and members:** [Enter real tester names]
+- **Date tested:** [Enter date]
+- **OS and terminal:** [Enter environment]
+- **Python version:** [Enter output of `python --version`]
+- **Files tested:** `v1_initial/ludo_oop.py` and `v1_initial/ludo_func.py`
+- **Primary focus:** Configuration, mixed seats, autoplay, commentary, and GUI
 
----
+## 1. Test Results
 
-## 1. Functional & Parity Test Results
+Use Pass, Fail, or Blocked. Leave no result implied.
 
-| Test Case | `ludo_oop.py` (Pass/Fail) | `ludo_func.py` (Pass/Fail) | Notes / Observations |
-|---|:---:|:---:|---|
-| 1. Quick Mode (28 tiles, 2 tokens) | | | |
-| 2. Classic Mode (52 tiles, 4 tokens) | | | |
-| 3. Seeded Parity (`--seed 42`) | | | |
-| 4. Invalid Moves & Bad Inputs | | | |
-| 5. Base Unlock (6) & Auto-Skip | | | |
-| 6. Captures & Safe Zones (`★`) | | | |
-| 7. Exact Roll to Home & Overshoot | | | |
-| 8. Win Condition Verification | | | |
-| 9. Draw Conditions (Max-Turn & Mutual) | | | |
-| 10. Quit & `--no-color` Flag | | | |
+| # | Scenario | OOP | Functional | Notes / exact command and seed |
+|---:|---|:---:|:---:|---|
+| 1 | Quick and Classic geometry | | | |
+| 2 | Base entry on 6 and auto-skip | | | |
+| 3 | Multiple legal token choices | | | |
+| 4 | Capture and capture count | | | |
+| 5 | Safe tile coexistence | | | |
+| 6 | Friendly stack | | | |
+| 7 | Strict blockade crossing and landing | | | |
+| 8 | Safe-pair pass and capture immunity | | | |
+| 9 | Kill-to-Enter loop and first-capture unlock | | | |
+| 10 | Exact and non-exact home | | | |
+| 11 | Bonus reasons do not stack | | | |
+| 12 | Triple-six forfeit and reset | | | |
+| 13 | Podium and 2P first-finisher behavior | | | |
+| 14 | Maximum-turn draw | | | |
+| 15 | Mutual draw declined then accepted | | | |
+| 16 | Quit confirmation and EOF | | | |
+| 17 | Invalid input stress test | | | |
+| 18 | Seeded OOP/functional parity | | | |
+| 19 | Wizard defaults and cancellation | | | |
+| 20 | JSON preset and CLI override precedence | | | |
+| 21 | Mixed human/bot seats | | | |
+| 22 | Autoplay and speed | | | |
+| 23 | Commentary switching | | | |
+| 24 | GUI controls, if available | | | |
+| 25 | No-color and encoding | | | |
 
----
+## 2. Bugs and Edge Cases
 
-## 2. Bugs & Edge Cases Identified
-*(List any crashes, incorrect rules, visual glitches, or inconsistencies between the two versions. If none found, state "No functional bugs encountered during testing.")*
+For each finding, include severity, reproduction steps, exact inputs, seed,
+expected behavior, observed behavior, and which implementation failed.
 
-1. **[Bug ID / Severity]:** [Description, steps to reproduce, observed vs. expected behavior]
-2. ...
+1. **[Finding ID / severity]:** [Real observed finding]
+2. **[Finding ID / severity]:** [Real observed finding]
 
----
+If no functional bugs were encountered, state that explicitly and identify the
+scenarios completed.
 
-## 3. Suggested Improvements for `v2_final`
-*(List 2–4 concrete suggestions to improve usability, visuals, clarity, or gameplay experience.)*
+## 3. Suggested Improvements
 
-1. **[UX / Feature Suggestion 1]:** [Description]
-2. **[UX / Feature Suggestion 2]:** [Description]
-
----
+1. **[Suggestion]:** [Concrete usability, visual, or configuration idea]
+2. **[Suggestion]:** [Concrete usability, visual, or configuration idea]
 
 ## 4. Overall Assessment
-- **Rule Parity Confirmed?** [Yes / No]
-- **Playability & CLI Clarity Rating (1–5):** [ / 5]
-- **Brief Summary Comment:** [2–3 sentences]
+
+- **Rule parity confirmed?** [Yes / No / Partially]
+- **Configuration clarity rating (1–5):** [Enter rating]
+- **GUI playability rating (1–5 or Blocked):** [Enter rating]
+- **Summary:** [Enter an evidence-based assessment]
+
+## 5. Tester Confirmation
+
+- **Results above were produced by actual testing:** [Enter names/initials]
+- **Additional output or screenshots attached:** [List paths or write None]

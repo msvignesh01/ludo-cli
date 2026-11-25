@@ -1,49 +1,77 @@
-# Comparison Report Guide (`docs/03_comparison_report.md`)
+# Comparison Report Guide
 
-> **Agent & Team Rule:** Do NOT write generic textbook essays! Every answer below MUST reference **actual classes, functions, dictionary keys, line counts, and side-by-side code snippets** taken directly from our finished `v2_final/ludo_oop.py` and `v2_final/ludo_func.py`.
+Use this guide for `docs/03_comparison_report.md`. Base every claim on the
+actual stage being submitted. The current completed implementation is the
+modular `v1_initial/`; `v2_final/` must be used only after genuine peer feedback
+produces real changes.
 
----
+## Required Evidence
 
-## Required Structure (Covers All 7 Prompt Questions — 15 Marks)
+Measure rather than estimate:
 
-### Executive Metrics Table (Auto-Computed from `v2_final/`)
-| Metric | `v2_final/ludo_oop.py` (OOP) | `v2_final/ludo_func.py` (Functional) |
-|---|---|---|
-| Total Lines of Code (LOC) | *(measure)* | *(measure)* |
-| Number of Classes | *(measure — e.g. 5)* | **0** *(AST-verified)* |
-| Number of Methods / Functions | *(measure)* | *(measure)* |
-| Primary State Container | Distributed object attributes (`Token`, `Player`, `Board`, `LudoGame`) | Single centralized `state` dictionary |
-| Automated Parity Test Result | 1,000 / 1,000 games identical | 1,000 / 1,000 games identical |
+- Python files and lines in each paradigm package.
+- AST class count and function/method count.
+- Classes and functions in shared modules.
+- Launcher size.
+- Latest observed unit, parity, subprocess, and verifier results.
 
-### Question 1: How is data stored in each approach?
-- Contrast `Token.steps`, `Player.tokens`, `Board.safe_tiles`, `LudoGame.turn_count` (encapsulated attributes on objects) vs. nested `state["players"][i]["tokens"][j]["steps"]` dictionary/list structure.
-- Include a real side-by-side snippet showing token initialization in both files.
+Label package metrics separately from thin launcher metrics. Do not claim the
+launcher contains the OOP classes when they live in `oop_ludo/`.
 
-### Question 2: How is game logic organized?
-- Contrast behavior co-located with data (`token.can_move()`, `board.get_global_pos()`, `game.apply_move()`) vs. flat modular function pipelines (`get_valid_moves(state, player_idx, roll)` -> `apply_move(state, token_idx, roll)`).
-- Explain how pure query helpers (`get_global_pos`, `can_token_move`, `preview_move`) look nearly identical in spirit, while stateful mutations differ structurally.
+## Seven Required Questions
 
-### Question 3: How are player turns managed?
-- Contrast `LudoGame.current_player_index`, `self.consecutive_sixes`, and `self.advance_turn()` mutating internal object state vs. `advance_turn(state)` explicitly mutating `state["current_player"]`, `state["consecutive_sixes"]`, and `state["turn_count"]`.
-- Show the exact `process_roll()` + `advance_turn()` code side by side.
+### 1. How is data stored?
 
-### Question 4: Which version is easier to understand?
-- Provide a nuanced, honest engineering answer grounded in our Ludo codebase:
-  - **Function-Based** is easier for beginners to trace sequentially from top to bottom (`main -> run_cli -> process_roll -> apply_move`) with zero `self` indirection.
-  - **Class-Based** becomes easier to read once the domain grows (Quick + Classic presets, multiple players, multiple tokens, separate renderer) because `player.all_finished()` reads like natural English compared to deeply nested dict indexing `state["players"][idx]["tokens"]`.
+Compare real `Token`, `Player`, `Board`, and `LudoGame` attributes with the
+functional `state["players"][i]["tokens"][j]["steps"]` structure. Include a
+short initialization snippet from both implementations.
 
-### Question 5: Which version is easier to debug?
-- **Function-Based advantage:** Printing or JSON-dumping a single `state` dict immediately exposes the entire universe of the game in one snapshot—making parity debugging and serialization trivial.
-- **Class-Based advantage:** Type structure and attribute names (`token.steps`) catch typos faster via IDE autocomplete and `AttributeError` vs. silent dictionary key mistakes (`state["turn_cnt"] = 1` creating a phantom key instead of updating `turn_count`!).
+### 2. How is game logic organized?
 
-### Question 6: Which version is easier to modify and extend?
-- **Use real evidence from our `v1 -> v2` peer-feedback cycle!**
-- Walk through one concrete feature we actually added in `v2_final` (and a hypothetical future extension like adding AI Bot players or Blockades):
-  - Adding an `AIPlayer(Player)` subclass in OOP isolates bot decision logic cleanly via polymorphism.
-  - Adding a new field in `ludo_func.py` requires auditing every function that reads or initializes the `state` dictionary schema.
+Compare object-owned methods such as `token.can_move()`,
+`board.get_global_pos()`, and `game.apply_move()` with explicit function
+pipelines such as `get_valid_moves(state, ...)` and `apply_move(state, ...)`.
+Explain which helpers are read-only and which mutate state.
 
-### Question 7: Advantages and Limitations of Each Approach
-- Present a crisp comparative matrix covering: Encapsulation, Boilerplate, State Inspection/Serialization, Extensibility, Risk of Silent Key Typos, and Ideal Use Cases.
+### 3. How are turns managed?
 
-### Capstone Reflection
-- Close with a sharp, evidence-backed paragraph answering: *"If AI can generate both versions of a program, why is it important for a programmer to understand programming concepts and design?"*
+Show real roll, bonus, advance, finish, and draw behavior. State clearly that
+`apply_move()` owns post-move turn resolution. Compare turn counters, six
+streaks, finished-seat skipping, and podium termination.
+
+### 4. Which version is easier to understand?
+
+Give a nuanced answer. Functional data flow is explicit and linear; OOP domain
+methods become easier to navigate as the model grows. Ground the answer in real
+expressions from the code.
+
+### 5. Which version is easier to debug?
+
+Compare direct dictionary inspection with object navigation. Explain how both
+use canonical JSON-serializable exports and ordered events. Include at least one
+real failure and its root cause.
+
+### 6. Which version is easier to modify and extend?
+
+Use a real implemented extension such as blockades, Kill-to-Enter, Podium
+Mode, bots, or GUI control. If peer-driven v2 evidence exists, map the actual
+report to both code changes and regression proof. Never invent a peer cycle.
+
+### 7. Advantages and limitations
+
+Compare encapsulation, boilerplate, state inspection, serialization,
+extensibility, silent key typos, testing, and ideal use cases.
+
+## Capstone
+
+Answer why understanding design still matters when AI can generate both
+versions. Refer to invariants, canonical contracts, test evidence, and the
+ability to explain and safely change code.
+
+## Accuracy Rules
+
+- Do not use stale test counts or hypothetical metrics.
+- Do not present shared contracts as a shared rules engine.
+- Do not claim a working v3 web application.
+- Do not claim human visual GUI testing unless it actually occurred.
+- Do not fabricate peer reports or v2 fixes.
