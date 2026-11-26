@@ -130,4 +130,20 @@ export interface ResolvedSetup {
   autoplay: boolean;
 }
 
+export interface InternalGame {
+  config: MatchConfig;
+  max_turns: number;
+  rng: import("./rng").PythonRandom;
+  current_player: number;
+  turn_count: number;
+  consecutive_sixes: number;
+  status: MatchStatus;
+  winner_index: number | null;
+  draw_reason: string | null;
+  finish_order: number[];
+  last_event: string;
+  events: GameEvent[];
+  players: InternalPlayer[];
+}
+
 export type SetupInput = Record<string, unknown>;
