@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "revision": "0fad840537caabaa98a86c7fb1945083b325ab44",
+  "revision": "762cb46007c2b77c8bd871ea69bfafd1fd92914e",
   "python": "3.11.0",
   "fixtures": {
     "rng.json": {
@@ -10,6 +10,20 @@
     "geometry.json": {
       "sha256": "4d30902422cb798232e7862a379c5b079d7c93facbf6469e149d13cbae45ab39",
       "boards": 6
+    },
+    "games.jsonl": {
+      "sha256": "f686bd0b5db3ef5689961f8ac66eb1e31701e7d035735c874c5942dbe2ccbdfe",
+      "bytes": 42500471,
+      "games": 1080,
+      "wins": 362,
+      "draws": 718,
+      "rolls": 93403,
+      "moves": 71678,
+      "snapshots": 238919
+    },
+    "rules.json": {
+      "sha256": "76ab40ef5d9ebbeb3fc55545de4dda9887553ae88f7d9efe347eb0722adfbbf6",
+      "records": 20
     }
   }
 }
