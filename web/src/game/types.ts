@@ -130,6 +130,20 @@ export interface ResolvedSetup {
   autoplay: boolean;
 }
 
+export type BotReason =
+  | "No legal moves"
+  | "Finish Home"
+  | "Unlock Kill-to-Enter"
+  | "Capture"
+  | "Safe tile"
+  | "Escape danger"
+  | "Advance furthest";
+
+export interface BotDecision {
+  token_idx: number | null;
+  reason: BotReason;
+}
+
 export interface InternalGame {
   config: MatchConfig;
   max_turns: number;
