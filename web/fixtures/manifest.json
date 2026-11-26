@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "revision": "b719b73e34fb4426350fee6b2fade15864f633f5",
+  "python": "3.11.0",
+  "fixtures": {
+    "rng.json": {
+      "sha256": "497d3887b95123b235a8bad27cd60f1a616bf5bf295ffb59e1874b327c9e9ece",
+      "seeds": 26
+    }
+  }
+}
