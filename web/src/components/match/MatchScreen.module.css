@@ -1,0 +1,215 @@
+.page {
+  width: min(1500px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 32px 40px;
+}
+
+.masthead {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.brandMark {
+  width: 24px;
+  height: 24px;
+  border: 6px solid var(--ink);
+  transform: rotate(45deg);
+  box-shadow: inset 0 0 0 3px var(--gold);
+}
+
+.tableLabel {
+  display: flex;
+  gap: 16px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.tableLabel span + span {
+  padding-left: 16px;
+  border-left: 1px solid var(--line);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 390px;
+  align-items: start;
+  gap: 26px;
+  padding-top: 26px;
+}
+
+.boardPanel {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.54);
+}
+
+.boardHeading,
+.boardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.boardHeading {
+  margin-bottom: 20px;
+}
+
+.boardHeading h1 {
+  margin-top: 5px;
+  font-size: clamp(28px, 3vw, 42px);
+}
+
+.viewStatus {
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.boardStage {
+  position: relative;
+  width: min(100%, 820px);
+  margin: 0 auto;
+}
+
+.canvasLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: none;
+}
+
+.canvasVisible {
+  display: block;
+}
+
+.boardFooter {
+  align-items: flex-start;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.boardFooter p {
+  max-width: 520px;
+}
+
+.boardFooter span {
+  flex: 0 0 auto;
+  font-family: var(--mono);
+}
+
+.rail {
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .page {
+    padding-inline: 20px;
+  }
+
+  .layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 18px;
+  }
+
+  .boardPanel {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .boardStage {
+    width: min(100%, 680px);
+  }
+
+  .rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .rail > :first-child,
+  .rail > :nth-child(2),
+  .rail > :nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding: 0 12px 28px;
+  }
+
+  .masthead {
+    min-height: 66px;
+  }
+
+  .tableLabel {
+    gap: 8px;
+    font-size: 8px;
+  }
+
+  .tableLabel span + span {
+    padding-left: 8px;
+  }
+
+  .layout {
+    padding-top: 14px;
+  }
+
+  .boardPanel {
+    padding: 12px;
+  }
+
+  .boardHeading {
+    margin-bottom: 14px;
+  }
+
+  .boardHeading h1 {
+    font-size: 27px;
+  }
+
+  .viewStatus {
+    font-size: 8px;
+  }
+
+  .boardFooter {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .rail {
+    grid-template-columns: 1fr;
+  }
+
+  .rail > * {
+    grid-column: auto !important;
+  }
+}

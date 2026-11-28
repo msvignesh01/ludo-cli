@@ -15,9 +15,7 @@ describe("GUI view model", () => {
     const stacked = model.markers.filter(
       (marker) => marker.location === "track" && marker.global_pos === 0,
     );
-    expect(
-      stacked.map((marker) => [marker.player_index, marker.token_idx, marker.cell]),
-    ).toEqual([
+    expect(stacked.map((marker) => [marker.player_index, marker.token_idx, marker.cell])).toEqual([
       [0, 1, [0, 3]],
       [1, 0, [0, 3]],
     ]);

@@ -37,6 +37,15 @@ describe("configuration", () => {
     expect(setup.kinds).toEqual(["human", "human"]);
   });
 
+  it("keeps speed precedence consistent across wizard, JSON, and URL sources", () => {
+    const setup = resolveSetup({
+      wizard: { speed: "slow" },
+      json: { speed: "fast" },
+      url: { speed: "normal" },
+    });
+    expect(setup.config.auto_delay).toBe(0.35);
+  });
+
   it("defaults omitted seats to bots when autoplay is enabled", () => {
     const setup = resolveSetup({ wizard: { player_count: 3, autoplay: true } });
     expect(setup.kinds).toEqual(["bot", "bot", "bot"]);
@@ -78,9 +87,7 @@ describe("configuration", () => {
   });
 
   it("rejects invalid ranges and non-finite delays", () => {
-    expect(() => buildConfig("quick", "showcase", 5)).toThrow(
-      "player_count must be 2, 3, or 4",
-    );
+    expect(() => buildConfig("quick", "showcase", 5)).toThrow("player_count must be 2, 3, or 4");
     expect(() => buildConfig("quick", "showcase", 2, { max_turns: 0 })).toThrow(
       "max_turns must be a positive integer",
     );
@@ -90,20 +97,14 @@ describe("configuration", () => {
   });
 
   it("normalizes names and seat kinds", () => {
-    expect(normalizePlayerNames([" Red ", "", "Red"], 3)).toEqual([
-      "Red",
-      "Player 2",
-      "Red (3)",
-    ]);
+    expect(normalizePlayerNames([" Red ", "", "Red"], 3)).toEqual(["Red", "Player 2", "Red (3)"]);
     expect(normalizePlayerKinds(["bot"], 3, "human")).toEqual(["bot", "human", "human"]);
     expect(() => normalizePlayerKinds(["bot", "bot"], 1)).toThrow("too many seat kinds");
     expect(() => normalizePlayerKinds(["alien"], 2)).toThrow("seat kinds must be");
   });
 
   it("caps imported JSON before parsing", () => {
-    expect(() => parseSetupJson(`{"padding":"${"x".repeat(65_536)}"}`)).toThrow(
-      "64 KiB",
-    );
-    expect(() => parseSetupJson("{")) .toThrow("could not load configuration");
+    expect(() => parseSetupJson(`{"padding":"${"x".repeat(65_536)}"}`)).toThrow("64 KiB");
+    expect(() => parseSetupJson("{")).toThrow("could not load configuration");
   });
 });

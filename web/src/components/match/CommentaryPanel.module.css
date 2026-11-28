@@ -1,0 +1,51 @@
+.panel {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.heading h2 {
+  font-size: 22px;
+}
+
+.heading span {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.log {
+  max-height: 220px;
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  counter-reset: commentary;
+}
+
+.log li {
+  padding: 8px 10px;
+  border-left: 2px solid var(--gold);
+  background: rgba(11, 16, 32, 0.045);
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 12px;
+}

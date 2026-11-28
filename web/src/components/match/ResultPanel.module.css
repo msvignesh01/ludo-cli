@@ -1,0 +1,65 @@
+.result {
+  display: grid;
+  gap: 14px;
+  padding: 22px;
+  border: 1px solid var(--ink);
+  border-top: 6px solid var(--gold);
+  background: var(--ink);
+  color: var(--ivory);
+}
+
+.result h2 {
+  font-size: 30px;
+}
+
+.outcome {
+  display: grid;
+  gap: 4px;
+  padding: 14px 0;
+  border-block: 1px solid rgba(247, 243, 234, 0.18);
+}
+
+.outcome strong {
+  color: var(--gold);
+  font-family: var(--display);
+  font-size: 24px;
+}
+
+.outcome span {
+  color: rgba(247, 243, 234, 0.72);
+  font-size: 12px;
+}
+
+.result dl {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  font-size: 11px;
+}
+
+.result dt {
+  color: rgba(247, 243, 234, 0.55);
+}
+
+.result dd {
+  margin: 3px 0 0;
+  text-transform: capitalize;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.result .buttonPrimary {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.result .button:not(.buttonPrimary) {
+  border-color: rgba(247, 243, 234, 0.5);
+  color: var(--ivory);
+}

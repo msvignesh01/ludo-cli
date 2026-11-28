@@ -1,0 +1,549 @@
+.page {
+  width: min(1440px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.masthead {
+  min-height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: -0.03em;
+}
+
+.brandMark {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3px;
+  transform: rotate(-8deg);
+}
+
+.brandMark i {
+  display: block;
+  border: 1px solid rgba(11, 16, 32, 0.28);
+}
+
+.edition {
+  font-family: var(--mono);
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 0.75fr);
+  align-items: center;
+  gap: 72px;
+  padding: 76px 0 64px;
+}
+
+.hero h1 {
+  max-width: 720px;
+  margin: 18px 0 24px;
+  font-size: clamp(56px, 7vw, 104px);
+  font-weight: 600;
+  letter-spacing: -0.065em;
+}
+
+.lede {
+  max-width: 620px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.ticket {
+  position: relative;
+  display: grid;
+  gap: 28px;
+  padding: 30px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--ivory);
+  box-shadow: 12px 12px 0 rgba(212, 162, 76, 0.28);
+}
+
+.ticket::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 54px;
+  bottom: 0;
+  border-left: 1px dashed rgba(247, 243, 234, 0.24);
+}
+
+.ticketStub {
+  width: fit-content;
+  padding: 5px 9px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ticket h2 {
+  margin: 8px 0;
+  font-size: 30px;
+}
+
+.ticket p:not(.eyebrow) {
+  color: rgba(247, 243, 234, 0.7);
+  font-size: 13px;
+}
+
+.ticket dl {
+  display: grid;
+  gap: 10px;
+  margin: 0 58px 0 0;
+  font-size: 12px;
+}
+
+.ticket dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(247, 243, 234, 0.14);
+}
+
+.ticket dt {
+  color: rgba(247, 243, 234, 0.55);
+}
+
+.ticket dd {
+  margin: 0;
+  text-align: right;
+}
+
+.resumeCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+  padding: 22px 26px;
+  border: 1px solid var(--ink);
+  border-left: 6px solid var(--gold);
+  background: var(--panel);
+}
+
+.resumeCard h2 {
+  margin: 5px 0;
+  font-size: 24px;
+}
+
+.resumeCard p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.resumeActions,
+.savedAlert {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.savedAlert {
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.savedAlert .alert {
+  flex: 1;
+}
+
+.checking {
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.setupGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.75fr);
+  align-items: start;
+  gap: 32px;
+  padding-bottom: 64px;
+}
+
+.form {
+  display: grid;
+  gap: 28px;
+  padding: 34px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.form > section {
+  display: grid;
+  gap: 18px;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sectionHeading > span {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--gold);
+  color: #8b6425;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sectionHeading h2 {
+  margin-top: 4px;
+  font-size: 25px;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.choiceCard {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: rgba(247, 243, 234, 0.5);
+  cursor: pointer;
+}
+
+.choiceCard:has(input:checked) {
+  border-color: var(--ink);
+  box-shadow: inset 0 -3px 0 var(--gold);
+  background: #fff;
+}
+
+.choiceCard input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  accent-color: var(--ink);
+}
+
+.choiceCard span,
+.checkbox span {
+  display: grid;
+  gap: 4px;
+}
+
+.choiceCard small,
+.checkbox small {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.numberGrid,
+.playbackGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.seatList {
+  display: grid;
+  gap: 10px;
+}
+
+.seatRow {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr) 150px;
+  align-items: end;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: rgba(247, 243, 234, 0.36);
+}
+
+.seatColor {
+  width: 10px;
+  height: 10px;
+  margin-bottom: 17px;
+  border: 1px solid rgba(11, 16, 32, 0.25);
+  border-radius: 50%;
+}
+
+.rules {
+  border-block: 1px solid var(--line);
+}
+
+.rules summary {
+  padding: 16px 0;
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rules[open] summary {
+  border-bottom: 1px solid var(--line);
+}
+
+.rulesIntro {
+  padding: 16px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.ruleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 20px;
+  padding: 12px 0 20px;
+}
+
+.ruleGrid .checkbox {
+  align-items: flex-start;
+  padding: 10px 0;
+}
+
+.ruleGrid input {
+  margin-top: 3px;
+  flex: 0 0 auto;
+}
+
+.start {
+  min-height: 54px;
+  font-size: 16px;
+}
+
+.sidebar {
+  display: grid;
+  gap: 22px;
+}
+
+.summary,
+.note {
+  padding: 26px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.summary h2,
+.note h2 {
+  margin: 8px 0 20px;
+  font-size: 28px;
+}
+
+.summary dl {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.summary dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.summary dt {
+  color: var(--muted);
+}
+
+.summary dd {
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+}
+
+.precedence {
+  margin-top: 16px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.note {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--ivory);
+}
+
+.note p:last-child {
+  color: rgba(247, 243, 234, 0.68);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 26px 0 36px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.errorPage {
+  width: min(680px, calc(100% - 40px));
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  gap: 20px;
+  margin: 0 auto;
+}
+
+.errorPage h1 {
+  font-size: clamp(38px, 8vw, 64px);
+}
+
+.errorPage p:not(.eyebrow) {
+  color: var(--muted);
+}
+
+@media (max-width: 1050px) {
+  .page {
+    padding: 0 28px;
+  }
+
+  .hero {
+    gap: 36px;
+  }
+
+  .setupGrid {
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.8fr);
+    gap: 22px;
+  }
+
+  .form {
+    padding: 24px;
+  }
+
+  .seatRow {
+    grid-template-columns: 10px minmax(0, 1fr) 120px;
+  }
+}
+
+@media (max-width: 800px) {
+  .hero,
+  .setupGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 54px 0 42px;
+  }
+
+  .ticket {
+    max-width: 520px;
+  }
+
+  .sidebar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .note {
+    grid-column: 1 / -1;
+  }
+
+  .resumeCard {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 560px) {
+  .page {
+    padding: 0 16px;
+  }
+
+  .masthead {
+    min-height: 70px;
+  }
+
+  .edition {
+    font-size: 9px;
+  }
+
+  .hero h1 {
+    font-size: 54px;
+  }
+
+  .lede {
+    font-size: 15px;
+  }
+
+  .ticket {
+    padding: 24px;
+    box-shadow: 7px 7px 0 rgba(212, 162, 76, 0.28);
+  }
+
+  .form,
+  .summary,
+  .note {
+    padding: 20px;
+  }
+
+  .cardGrid,
+  .numberGrid,
+  .playbackGrid,
+  .ruleGrid,
+  .sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .seatRow {
+    grid-template-columns: 10px 1fr;
+  }
+
+  .seatRow > label:last-child {
+    grid-column: 2;
+  }
+
+  .note {
+    grid-column: auto;
+  }
+
+  .savedAlert {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

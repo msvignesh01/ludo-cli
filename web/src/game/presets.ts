@@ -14,7 +14,13 @@ export const PLAYER_SPECS: readonly PlayerSpec[] = [
   { color: "BLUE", hex: "#3B82F6", ansi: "\u001b[94m", prefix: "B" },
 ];
 
-export const PRESETS: Record<Mode, Omit<MatchConfig, keyof ProfileRules | "max_turns" | "auto_delay" | "commentary" | "ui" | "seed" | "blockades">> = {
+export const PRESETS: Record<
+  Mode,
+  Omit<
+    MatchConfig,
+    keyof ProfileRules | "max_turns" | "auto_delay" | "commentary" | "ui" | "seed" | "blockades"
+  >
+> = {
   quick: {
     mode: "quick",
     profile: "showcase",

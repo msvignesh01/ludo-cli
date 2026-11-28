@@ -7,17 +7,18 @@ import {
   SPEED_DELAYS,
   isBlockades,
 } from "./presets";
-import type {
-  MatchConfig,
-  Mode,
-  PlayerKind,
-  Profile,
-  ResolvedSetup,
-  SetupInput,
-} from "./types";
+import type { MatchConfig, Mode, PlayerKind, Profile, ResolvedSetup, SetupInput } from "./types";
 
 const LOCKED_GEOMETRY = new Set<string>(LOCKED_GEOMETRY_KEYS);
-const SETUP_METADATA = new Set(["config", "names", "kinds", "seat", "autoplay", "no_color", "speed"]);
+const SETUP_METADATA = new Set([
+  "config",
+  "names",
+  "kinds",
+  "seat",
+  "autoplay",
+  "no_color",
+  "speed",
+]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -50,13 +51,21 @@ function validateConfig(config: MatchConfig): void {
   if (!isInteger(config.player_count) || config.player_count < 2 || config.player_count > 4) {
     throw new Error("player_count must be 2, 3, or 4");
   }
-  if (!isInteger(config.tokens_per_player) || config.tokens_per_player < 1 || config.tokens_per_player > 4) {
+  if (
+    !isInteger(config.tokens_per_player) ||
+    config.tokens_per_player < 1 ||
+    config.tokens_per_player > 4
+  ) {
     throw new Error("tokens_per_player must be an integer from 1 to 4");
   }
   if (!isInteger(config.max_turns) || config.max_turns <= 0) {
     throw new Error("max_turns must be a positive integer");
   }
-  if (typeof config.auto_delay !== "number" || !Number.isFinite(config.auto_delay) || config.auto_delay < 0) {
+  if (
+    typeof config.auto_delay !== "number" ||
+    !Number.isFinite(config.auto_delay) ||
+    config.auto_delay < 0
+  ) {
     throw new Error("auto_delay must be a finite non-negative number");
   }
   if (config.seed !== null && !isInteger(config.seed)) {
@@ -190,7 +199,12 @@ export function resolveSetup(sources: {
     if (!source) continue;
     if (!isRecord(source)) throw new Error("setup sources must be dictionaries");
     for (const [key, value] of Object.entries(source)) {
-      if (SETUP_METADATA.has(key) || LOCKED_GEOMETRY.has(key) || value === null || value === undefined) {
+      if (
+        SETUP_METADATA.has(key) ||
+        LOCKED_GEOMETRY.has(key) ||
+        value === null ||
+        value === undefined
+      ) {
         continue;
       }
       settings[key] = value;
@@ -208,9 +222,13 @@ export function resolveSetup(sources: {
       if (typeof source.autoplay !== "boolean") throw new Error("autoplay must be true or false");
       autoplay = source.autoplay;
     }
-    if (settings.auto_delay === undefined && typeof source.speed === "string") {
-      if (!(source.speed in SPEED_DELAYS)) throw new Error("speed must be 'slow', 'normal', or 'fast'");
-      settings.auto_delay = SPEED_DELAYS[source.speed as keyof typeof SPEED_DELAYS];
+    if (source.speed !== undefined) {
+      if (typeof source.speed !== "string" || !(source.speed in SPEED_DELAYS)) {
+        throw new Error("speed must be 'slow', 'normal', or 'fast'");
+      }
+      if (!("auto_delay" in source)) {
+        settings.auto_delay = SPEED_DELAYS[source.speed as keyof typeof SPEED_DELAYS];
+      }
     }
   }
   const mode = settings.mode ?? "quick";
@@ -236,7 +254,9 @@ export function parseSetupJson(text: string): SetupInput {
   try {
     data = JSON.parse(text);
   } catch (error) {
-    throw new Error(`could not load configuration: ${error instanceof Error ? error.message : "invalid JSON"}`);
+    throw new Error(
+      `could not load configuration: ${error instanceof Error ? error.message : "invalid JSON"}`,
+    );
   }
   if (!isRecord(data)) throw new Error("configuration must be a dictionary");
   const settings = { ...data };

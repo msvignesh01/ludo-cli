@@ -61,9 +61,7 @@ function boundaryCycle(size: number, center: number): Cell[] {
   for (const cell of endpoints) {
     const diagonal = endpoints.filter(
       (other) =>
-        other !== cell &&
-        Math.abs(other[0] - cell[0]) === 1 &&
-        Math.abs(other[1] - cell[1]) === 1,
+        other !== cell && Math.abs(other[0] - cell[0]) === 1 && Math.abs(other[1] - cell[1]) === 1,
     );
     if (diagonal.length === 1) {
       const neighbor = diagonal[0]!;
