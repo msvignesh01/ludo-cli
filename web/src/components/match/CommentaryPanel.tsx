@@ -24,7 +24,6 @@ export function CommentaryPanel({ messages, mode }: { messages: string[]; mode: 
           className={styles.log}
           ref={log}
           data-testid="commentary-log"
-          role="log"
           aria-live="polite"
           aria-relevant="additions"
         >

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useId, useRef } from "react";
 import styles from "./JsonConfigPanel.module.css";
 
 export function JsonConfigPanel({
@@ -15,6 +15,7 @@ export function JsonConfigPanel({
   onLoad: (value: string) => void;
 }) {
   const fileInput = useRef<HTMLInputElement>(null);
+  const errorId = useId();
 
   async function loadFile(file: File | undefined): Promise<void> {
     if (!file) return;
@@ -39,10 +40,12 @@ export function JsonConfigPanel({
           onChange={(event) => onChange(event.target.value)}
           placeholder={'{"mode":"quick","profile":"showcase","player_count":2}'}
           spellCheck={false}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? errorId : undefined}
         />
       </label>
       {error ? (
-        <p className="alert" role="alert">
+        <p className="alert" id={errorId} role="alert">
           {error}
         </p>
       ) : null}

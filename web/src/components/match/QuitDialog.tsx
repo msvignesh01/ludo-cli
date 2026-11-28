@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { MatchController } from "../../match/controller";
+import { trapDialogFocus } from "./dialogFocus";
 import styles from "./MatchDialog.module.css";
 
 export function QuitDialog({
@@ -25,6 +26,7 @@ export function QuitDialog({
       ref={dialog}
       className={styles.dialog}
       aria-labelledby="quit-title"
+      onKeyDown={trapDialogFocus}
       onCancel={(event) => {
         event.preventDefault();
         onClose();

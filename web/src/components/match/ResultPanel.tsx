@@ -14,7 +14,6 @@ export function ResultPanel({
   onExport: () => void;
   onNewMatch: () => void;
 }) {
-  if (snapshot.status === "PLAYING") return null;
   const winner = snapshot.winner_index === null ? null : snapshot.players[snapshot.winner_index];
   const reason =
     snapshot.status === "WON"
@@ -22,37 +21,46 @@ export function ResultPanel({
       : snapshot.status === "DRAW"
         ? (snapshot.draw_reason ?? "Draw")
         : "Game quit.";
+  const announcement =
+    snapshot.status === "PLAYING" ? "" : `${statusLabel(snapshot.status)}. ${reason}`;
 
   return (
-    <section className={styles.result} aria-labelledby="result-heading">
-      <p className="eyebrow">Table closed</p>
-      <h2 id="result-heading">Match result</h2>
-      <div className={styles.outcome}>
-        <strong data-testid="result-status">{statusLabel(snapshot.status)}</strong>
-        <span data-testid="result-reason">{reason}</span>
-      </div>
-      <dl>
-        <div>
-          <dt>Turns</dt>
-          <dd>{snapshot.turn_count}</dd>
-        </div>
-        <div>
-          <dt>Rolls</dt>
-          <dd>{snapshot.events.filter((event) => event.type === "DICE_ROLLED").length}</dd>
-        </div>
-        <div>
-          <dt>Mode</dt>
-          <dd>{snapshot.config.mode}</dd>
-        </div>
-      </dl>
-      <div className={styles.actions}>
-        <button className="button buttonPrimary" type="button" onClick={onExport}>
-          Export match
-        </button>
-        <button className="button" type="button" onClick={onNewMatch}>
-          New match
-        </button>
-      </div>
-    </section>
+    <>
+      <p className="srOnly" role="status" aria-live="polite" aria-atomic="true">
+        {announcement}
+      </p>
+      {snapshot.status !== "PLAYING" ? (
+        <section className={styles.result} aria-labelledby="result-heading">
+          <p className="eyebrow">Table closed</p>
+          <h2 id="result-heading">Match result</h2>
+          <div className={styles.outcome}>
+            <strong data-testid="result-status">{statusLabel(snapshot.status)}</strong>
+            <span data-testid="result-reason">{reason}</span>
+          </div>
+          <dl>
+            <div>
+              <dt>Turns</dt>
+              <dd>{snapshot.turn_count}</dd>
+            </div>
+            <div>
+              <dt>Rolls</dt>
+              <dd>{snapshot.events.filter((event) => event.type === "DICE_ROLLED").length}</dd>
+            </div>
+            <div>
+              <dt>Mode</dt>
+              <dd>{snapshot.config.mode}</dd>
+            </div>
+          </dl>
+          <div className={styles.actions}>
+            <button className="button buttonPrimary" type="button" onClick={onExport}>
+              Export match
+            </button>
+            <button className="button" type="button" onClick={onNewMatch}>
+              New match
+            </button>
+          </div>
+        </section>
+      ) : null}
+    </>
   );
 }

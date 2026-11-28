@@ -21,7 +21,7 @@
 }
 
 .cell small {
-  color: rgba(11, 16, 32, 0.48);
+  color: var(--muted);
   font-family: var(--mono);
   font-size: clamp(5px, 0.75vw, 9px);
 }
@@ -124,7 +124,7 @@
   border: 2px solid;
   border-radius: 50%;
   box-shadow: 0 2px 5px rgba(11, 16, 32, 0.3);
-  color: #fff;
+  color: var(--ink);
   font-family: var(--mono);
   font-size: clamp(6px, 0.9vw, 10px);
   font-weight: 700;

@@ -138,7 +138,7 @@ export function DomBoard({
             className={`${styles.token} ${targetKey ? styles.targetToken : ""}`}
             style={position}
             key={`${marker.player_index}-${marker.token_idx}`}
-            title={`${marker.label}: ${marker.location}`}
+            aria-hidden="true"
           >
             {marker.label}
           </span>
