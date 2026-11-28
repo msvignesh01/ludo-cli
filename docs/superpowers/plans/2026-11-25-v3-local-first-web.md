@@ -10,6 +10,15 @@
 
 **Spec:** `docs/superpowers/specs/2026-11-25-v3-local-first-web-design.md`
 
+## Execution Status
+
+- Tasks 0–9 are complete and verified locally.
+- Task 10 steps 1–4 are complete; accessibility fixes were committed as
+  `2150b21`.
+- Task 10 steps 5–8 remain pending: final release commit, GitHub push, Vercel
+  deployment, and production smoke test.
+- Paths below were reconciled to the implemented `web/src/...` layout.
+
 ## Global Constraints
 
 - Preserve `v1_initial/` as the verified behavioral source of truth; do not rewrite its rules for the web port.
@@ -37,7 +46,7 @@
 - Consumes: fresh `python scripts/verify_gates.py --stage v1` output
 - Produces: a committed v1 source baseline and exact current evidence
 
-- [ ] **Step 1: Record the fresh observed gate**
+- [x] **Step 1: Record the fresh observed gate**
 
 Replace prior final timing rows with the latest observed output while retaining the earlier home-on-six fix trace:
 
@@ -53,7 +62,7 @@ GATE PASSED: Stage 'v1' achieved 100% perfection!
 Failures: 0 | Warnings: 0
 ```
 
-- [ ] **Step 2: Review and stage source explicitly**
+- [x] **Step 2: Review and stage source explicitly**
 
 Run:
 
@@ -66,13 +75,13 @@ git status --short
 
 Confirm no `.pyc`, `__pycache__`, `.env`, credential, or browser artifact is staged.
 
-- [ ] **Step 3: Commit the verified baseline**
+- [x] **Step 3: Commit the verified baseline**
 
 ```bash
 git commit -m "feat: complete verified multiplayer Ludo showcase"
 ```
 
-- [ ] **Step 4: Verify the commit**
+- [x] **Step 4: Verify the commit**
 
 ```bash
 git show --stat --oneline HEAD
@@ -89,20 +98,20 @@ Expected: source/docs are committed, generated caches remain untracked or unstag
 - Create: `web/package.json`, `web/package-lock.json`, `web/tsconfig.json`
 - Create: `web/next.config.ts`, `web/vitest.config.ts`, `web/playwright.config.ts`
 - Create: `web/eslint.config.mjs`, `web/.prettierrc.json`, `web/.gitignore`
-- Create: `web/README.md`, `web/app/layout.tsx`, `web/app/page.tsx`, `web/app/globals.css`
+- Create: `web/README.md`, `web/src/app/layout.tsx`, `web/src/app/page.tsx`, `web/src/app/globals.css`
 - Create: `web/tests/smoke.test.ts`
 
 **Interfaces:**
 - Consumes: Node 24+, npm, approved spec
 - Produces: scripts `dev`, `build`, `lint`, `typecheck`, `test`, `test:parity`, `test:e2e`, `test:a11y`
 
-- [ ] **Step 1: Create the Next.js shell**
+- [x] **Step 1: Create the Next.js shell**
 
 ```bash
 npm create next-app@latest web -- --typescript --eslint --app --src-dir --import-alias "@/*" --use-npm --no-tailwind
 ```
 
-- [ ] **Step 2: Install pinned runtime and test dependencies**
+- [x] **Step 2: Install pinned runtime and test dependencies**
 
 ```bash
 cd web
@@ -112,7 +121,7 @@ npm install -D @types/three vitest @playwright/test @axe-core/playwright prettie
 
 Record exact resolved versions in `package-lock.json`; do not use floating version ranges in documentation.
 
-- [ ] **Step 3: Add strict TypeScript and test configuration**
+- [x] **Step 3: Add strict TypeScript and test configuration**
 
 `tsconfig.json` must enable:
 
@@ -130,7 +139,7 @@ Record exact resolved versions in `package-lock.json`; do not use floating versi
 
 `vitest.config.ts` must include `tests/unit/**/*.test.ts` and `tests/parity/**/*.test.ts` with the Node environment. `playwright.config.ts` must start `npm run dev -- --hostname 127.0.0.1 --port 3100`, use `http://127.0.0.1:3100`, and define desktop and mobile projects.
 
-- [ ] **Step 4: Write the first failing smoke test**
+- [x] **Step 4: Write the first failing smoke test**
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -143,7 +152,7 @@ describe("web scaffold", () => {
 });
 ```
 
-- [ ] **Step 5: Run and observe the expected failure**
+- [x] **Step 5: Run and observe the expected failure**
 
 ```bash
 npm test
@@ -151,7 +160,7 @@ npm test
 
 Expected: FAIL because `src/game/presets.ts` does not exist.
 
-- [ ] **Step 6: Add the minimal preset export and verify green**
+- [x] **Step 6: Add the minimal preset export and verify green**
 
 Create `src/game/presets.ts` with `PLAYER_SPECS` copied as data from `v1_initial/shared/contracts.py`, then run:
 
@@ -164,7 +173,7 @@ npm run build
 
 Expected: every command exits 0.
 
-- [ ] **Step 7: Commit the scaffold**
+- [x] **Step 7: Commit the scaffold**
 
 ```bash
 git add web
@@ -184,7 +193,7 @@ git commit -m "feat: scaffold tested Next.js Ludo web app"
 - Consumes: Python `PRESETS`, `PROFILE_RULES`, `MATCH_DEFAULTS`, `EVENT_TYPES`, `build_config`, `config_from_dict`, `merge_setup`
 - Produces: `MatchConfig`, `CanonicalSnapshot`, `GameEvent`, `MovePreview`, `SetupInput`, `ResolvedSetup`, `buildConfig`, `configFromDict`, `resolveSetup`, `normalizePlayerNames`, `normalizePlayerKinds`, `makeEvent`
 
-- [ ] **Step 1: Write failing configuration tests**
+- [x] **Step 1: Write failing configuration tests**
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -232,7 +241,7 @@ describe("configuration", () => {
 });
 ```
 
-- [ ] **Step 2: Run and observe failure**
+- [x] **Step 2: Run and observe failure**
 
 ```bash
 npm test -- tests/unit/config.test.ts
@@ -240,13 +249,13 @@ npm test -- tests/unit/config.test.ts
 
 Expected: FAIL because `config.ts` is missing.
 
-- [ ] **Step 3: Implement exact data contracts**
+- [x] **Step 3: Implement exact data contracts**
 
 Define `Mode = "quick" | "classic"`, `Profile = "showcase" | "classic"`, `Blockades = "none" | "strict" | "safe_pair"`, `CommentaryMode = "gameplay" | "code" | "both" | "off"`, `PlayerKind = "human" | "bot"`, and `MatchStatus = "PLAYING" | "WON" | "DRAW" | "QUIT"`.
 
 `MatchConfig` contains every Python config key, including `ui: "cli" | "gui"`, `auto_delay`, `commentary`, and `seed: number | null`. Match seeds must be safe integers; the RNG API separately accepts arbitrary integer `BigInt` values for the required negative and large-seed parity fixtures. Canonical player export contains `index`, `name`, `kind`, `color`, `start_index`, `captures_made`, and tokens with only `label` and `steps`. Internal players may additionally contain `color_hex`, `prefix`, and `token_idx`.
 
-- [ ] **Step 4: Implement validation and precedence**
+- [x] **Step 4: Implement validation and precedence**
 
 Port these Python behaviors exactly:
 
@@ -259,7 +268,7 @@ Port these Python behaviors exactly:
 - accept both existing JSON presets without modification;
 - cap imported JSON at 64 KiB before parsing.
 
-- [ ] **Step 5: Add event contract tests and implementation**
+- [x] **Step 5: Add event contract tests and implementation**
 
 ```ts
 expect(makeEvent("GAME_STARTED", 0, null, { mode: "quick", profile: "showcase" })).toEqual({
@@ -272,7 +281,7 @@ expect(makeEvent("GAME_STARTED", 0, null, { mode: "quick", profile: "showcase" }
 
 Implement all fourteen Python event names and reject unknown event types.
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 ```bash
 npm run lint
@@ -282,7 +291,7 @@ npm test
 
 Expected: exit 0.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add web/src/game web/tests/unit/config.test.ts web/tests/unit/events.test.ts
@@ -303,11 +312,11 @@ git commit -m "feat: port canonical web game contracts"
 - Consumes: Python `random.Random(seed).randint(1, 6)`
 - Produces: `PythonRandom`, `createPythonRandom`, `serializeRandom`, `deserializeRandom`
 
-- [ ] **Step 1: Generate Python RNG fixtures**
+- [x] **Step 1: Generate Python RNG fixtures**
 
 The exporter must use the repository root explicitly, import `random`, and write decimal seed strings plus 10,000 rolls for seeds `-1`, `0`, `1`, `42`, `2**32`, `2**64 + 7`, and twenty fixed assignment seeds. Record Python version, source revision, schema version, and SHA-256 of the fixture payload in `manifest.json`.
 
-- [ ] **Step 2: Write the failing RNG parity test**
+- [x] **Step 2: Write the failing RNG parity test**
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -323,7 +332,7 @@ describe("Python-compatible RNG", () => {
 });
 ```
 
-- [ ] **Step 3: Run and observe failure**
+- [x] **Step 3: Run and observe failure**
 
 ```bash
 npm test -- tests/unit/rng.test.ts
@@ -331,7 +340,7 @@ npm test -- tests/unit/rng.test.ts
 
 Expected: FAIL because `rng.ts` is missing.
 
-- [ ] **Step 4: Implement MT19937 and Python seed semantics**
+- [x] **Step 4: Implement MT19937 and Python seed semantics**
 
 Implement:
 
@@ -345,11 +354,11 @@ Implement:
 
 Use `BigInt` only at seed/conversion boundaries; keep the hot roll path in 32-bit numbers.
 
-- [ ] **Step 5: Implement persistence serialization**
+- [x] **Step 5: Implement persistence serialization**
 
 `serializeRandom` returns `{ seed: string | null, index: number, words: number[] }`. `deserializeRandom` validates 624 words, unsigned 32-bit ranges, and index bounds before restoring. Canonical game export must never call it.
 
-- [ ] **Step 6: Verify all seeds**
+- [x] **Step 6: Verify all seeds**
 
 ```bash
 npm test -- tests/unit/rng.test.ts
@@ -358,7 +367,7 @@ npm run typecheck
 
 Expected: all fixed seeds match 10,000 rolls exactly.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add web/src/game/rng.ts web/scripts/export-python-fixtures.py web/fixtures/rng.json web/fixtures/manifest.json web/tests/unit/rng.test.ts
@@ -378,11 +387,11 @@ git commit -m "feat: match Python seeded dice in TypeScript"
 - Consumes: Python `build_board_geometry`, `build_gui_view_model`
 - Produces: `BoardGeometry`, `BoardMarker`, `BoardViewModel`, `buildBoardGeometry`, `buildGuiViewModel`
 
-- [ ] **Step 1: Extend the Python exporter for geometry**
+- [x] **Step 1: Extend the Python exporter for geometry**
 
 Write Quick and Classic geometry for 2P, 3P, and 4P, plus one view model containing base, track, home, and finished markers. Store the fixture hash in the manifest.
 
-- [ ] **Step 2: Write failing geometry tests**
+- [x] **Step 2: Write failing geometry tests**
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -398,7 +407,7 @@ describe("locked geometry", () => {
 });
 ```
 
-- [ ] **Step 3: Run and observe failure**
+- [x] **Step 3: Run and observe failure**
 
 ```bash
 npm test -- tests/unit/geometry.test.ts
@@ -406,19 +415,19 @@ npm test -- tests/unit/geometry.test.ts
 
 Expected: FAIL because `geometry.ts` is missing.
 
-- [ ] **Step 4: Port the boundary-cycle algorithm**
+- [x] **Step 4: Port the boundary-cycle algorithm**
 
 Translate `_boundary_cycle` directly: build the three-cell-wide cross, identify orthogonal boundary neighbors, connect the two diagonal endpoints, then walk from `(0, center - 1)`. Derive `size = track_len / 4 + 2`; never hardcode 9, 15, 28, 52, 31, or 56 in engine or rendering code.
 
-- [ ] **Step 5: Port home lanes yards and marker mapping**
+- [x] **Step 5: Port home lanes yards and marker mapping**
 
 Use the same four home-lane arrays and four yard boxes as Python. Seat quadrants derive from start indices. Map `steps == -1` to yard center, `steps == home_finish` to center, private-home steps to the player lane, and outer steps to `(start_index + steps) % track_len`.
 
-- [ ] **Step 6: Add exact view-model assertions**
+- [x] **Step 6: Add exact view-model assertions**
 
 Assert marker order, `location`, `global_pos`, `cell`, `color_hex`, `prefix`, safe tiles, start tiles, status, and last event against the Python fixture. Assert stacked track markers retain distinct `player_index`/`token_idx` identities.
 
-- [ ] **Step 7: Verify**
+- [x] **Step 7: Verify**
 
 ```bash
 npm test -- tests/unit/geometry.test.ts tests/unit/view-model.test.ts
@@ -427,7 +436,7 @@ npm run typecheck
 
 Expected: exit 0.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add web/src/game/geometry.ts web/src/game/view-model.ts web/fixtures/geometry.json web/tests/unit/geometry.test.ts web/tests/unit/view-model.test.ts
@@ -447,7 +456,7 @@ git commit -m "feat: port locked Ludo board geometry"
 - Consumes: canonical types, validated config, Python functional rules/state
 - Produces: `InternalGame`, `createGame(config, names, seed?, kinds?)`, `rollDie`, `processRoll`, `previewMove`, `getValidMoves`, `recordBotDecision`, `applyMove`, `advanceTurn`, `declareMutualDraw`, `quitGame`, `exportCanonicalState`
 
-- [ ] **Step 1: Write failing rule tests before implementation**
+- [x] **Step 1: Write failing rule tests before implementation**
 
 Port every intent from `testing/test_rules.py` and `testing/test_automation.py`. Include this exact regression:
 
@@ -470,7 +479,7 @@ it("resets the six streak when a token reaches home on a six", () => {
 
 Also assert base unlock, circular wrap, private-home boundary, exact overshoot rejection, non-exact clamp, safe tile, disabled safe tiles, single/multi capture, friendly stack, strict intermediate blockade, safe-pair immunity, no-blockade stack capture, capture bonus non-stacking, triple-six forfeit, auto-skip, 2P victory, podium continuation, max-turn draw, mutual draw, and quit.
 
-- [ ] **Step 2: Run and observe failure**
+- [x] **Step 2: Run and observe failure**
 
 ```bash
 npm test -- tests/unit/rules.test.ts
@@ -478,23 +487,23 @@ npm test -- tests/unit/rules.test.ts
 
 Expected: FAIL because the engine modules are missing.
 
-- [ ] **Step 3: Implement immutable canonical export around explicit mutable transitions**
+- [x] **Step 3: Implement immutable canonical export around explicit mutable transitions**
 
 `InternalGame` owns config, RNG, players, counters, status, finish order, last event, and events. Transition functions mutate only this internal object. UI code receives deep-cloned canonical snapshots and cannot mutate tokens.
 
-- [ ] **Step 4: Implement queries exactly**
+- [x] **Step 4: Implement queries exactly**
 
 `computeTarget` must return `{ newSteps, wrapped, path }` or `null`. The Kill-to-Enter wrap uses `raw_target % (track_len - 1)` and includes every crossed outer step. `strictPathBlocked` checks every intermediate global tile for an opponent pair. `capturableTokens` excludes safe tiles and safe-pair stacks. `previewMove` returns the exact Python keys and reason strings.
 
-- [ ] **Step 5: Implement roll and move transitions exactly**
+- [x] **Step 5: Implement roll and move transitions exactly**
 
 `processRoll` emits `DICE_ROLLED`, increments/reset the six streak, voids the third six before movement, auto-skips empty legal lists, and advances once. `applyMove` validates the preview, moves once, emits movement/capture/blockade events, resets the streak on home, appends finish order, computes required finishers, grants at most one bonus, and advances only when it owns the resolution.
 
-- [ ] **Step 6: Implement terminal transitions and canonical export**
+- [x] **Step 6: Implement terminal transitions and canonical export**
 
 Use exact reason strings `Maximum turn limit reached` and `Mutual agreement`. `GAME_QUIT` has empty data. Export the exact Python key set and clone config, finish order, events, players, and tokens. Do not export RNG, `token_idx`, `color_hex`, or `prefix`.
 
-- [ ] **Step 7: Add stable JSON hashing**
+- [x] **Step 7: Add stable JSON hashing**
 
 ```ts
 export function stableStringify(value: unknown): string {
@@ -507,7 +516,7 @@ export function stableStringify(value: unknown): string {
 
 Python fixtures use `json.dumps(snapshot, sort_keys=True, separators=(",", ":"), ensure_ascii=False)` before SHA-256.
 
-- [ ] **Step 8: Verify all rule tests**
+- [x] **Step 8: Verify all rule tests**
 
 ```bash
 npm run lint
@@ -517,7 +526,7 @@ npm test -- tests/unit/rules.test.ts
 
 Expected: exit 0 with no weakened assertions.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add web/src/game/queries.ts web/src/game/transitions.ts web/src/game/engine.ts web/src/game/stable-json.ts web/tests/unit/rules.test.ts
@@ -536,7 +545,7 @@ git commit -m "feat: port complete Ludo rules engine"
 - Consumes: `previewMove`, `getValidMoves`, `GameEvent`
 - Produces: `BotDecision`, `decisionDetails`, `chooseMove`, `gameplayMessage`, `codeMessage`, `formatCommentary`
 
-- [ ] **Step 1: Write failing bot-priority tests**
+- [x] **Step 1: Write failing bot-priority tests**
 
 Assert this exact score tuple and final tie-break:
 
@@ -554,7 +563,7 @@ const score = [
 
 Test Finish Home, Capture, Unlock, Safe tile, Escape danger, Advance furthest, lowest-index tie, empty legal list, and exact `BOT_DECISION` payload parity.
 
-- [ ] **Step 2: Run and observe failure**
+- [x] **Step 2: Run and observe failure**
 
 ```bash
 npm test -- tests/unit/bot.test.ts
@@ -562,11 +571,11 @@ npm test -- tests/unit/bot.test.ts
 
 Expected: FAIL because `bot.ts` is missing.
 
-- [ ] **Step 3: Implement danger and scoring queries**
+- [x] **Step 3: Implement danger and scoring queries**
 
 Use circular distance `(destination - opponentPosition) % track_len`; danger exists when distance is 1–6 and the tile is not safe. Return the same reason strings as Python: `No legal moves`, `Finish Home`, `Unlock Kill-to-Enter`, `Capture`, `Safe tile`, `Escape danger`, `Advance furthest`.
 
-- [ ] **Step 4: Write failing commentary tests**
+- [x] **Step 4: Write failing commentary tests**
 
 Port every event branch from `func_ludo/commentary.py`. Gameplay wording must match exactly. Code mode must name real web entry points, for example:
 
@@ -579,7 +588,7 @@ Web: advanceTurn(game)
 
 `both` emits `[Gameplay] ...` and `[Code] ...`; `off` emits no lines.
 
-- [ ] **Step 5: Implement commentary and verify**
+- [x] **Step 5: Implement commentary and verify**
 
 ```bash
 npm test -- tests/unit/bot.test.ts tests/unit/commentary.test.ts
@@ -588,7 +597,7 @@ npm run typecheck
 
 Expected: exit 0.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add web/src/game/bot.ts web/src/game/commentary.ts web/tests/unit/bot.test.ts web/tests/unit/commentary.test.ts
@@ -608,7 +617,7 @@ git commit -m "feat: add deterministic web bots and commentary"
 - Consumes: verified Python functional engine, OOP bot policy, web engine
 - Produces: 1,080 versioned game action scripts with final snapshots, transition hashes, and measured totals
 
-- [ ] **Step 1: Extend the exporter with compact game records**
+- [x] **Step 1: Extend the exporter with compact game records**
 
 Reuse the exact twelve `SCENARIOS` and seed rule `20_000 + game_number` from `testing/parity_test.py`. For every game, emit:
 
@@ -634,11 +643,11 @@ Reuse the exact twelve `SCENARIOS` and seed rule `20_000 + game_number` from `te
 
 Hash the initial snapshot and each snapshot after roll processing, bot decision, move, and final export, matching Python's 238,919 comparison boundaries.
 
-- [ ] **Step 2: Add rule-level oracle fixtures**
+- [x] **Step 2: Add rule-level oracle fixtures**
 
 Export focused examples for safe tiles, strict path blockade, safe-pair immunity, Kill-to-Enter wrap, exact/non-exact home, home-on-six reset, triple six, no-move skip, capture, bonus, podium, turn-cap draw, mutual draw, and quit. Each record contains setup mutations, action, expected preview/result, and expected canonical snapshot.
 
-- [ ] **Step 3: Write the failing replay test**
+- [x] **Step 3: Write the failing replay test**
 
 ```ts
 import { describe, expect, it } from "vitest";
@@ -687,7 +696,7 @@ describe("Python oracle replay", () => {
 });
 ```
 
-- [ ] **Step 4: Run and inspect the first mismatch**
+- [x] **Step 4: Run and inspect the first mismatch**
 
 ```bash
 npm run test:parity
@@ -695,7 +704,7 @@ npm run test:parity
 
 Expected before fixes: FAIL at the first divergent game/action. Fix the web engine root cause; never edit expected fixtures or weaken comparisons to pass.
 
-- [ ] **Step 5: Iterate until the complete matrix passes**
+- [x] **Step 5: Iterate until the complete matrix passes**
 
 Required printed totals:
 
@@ -704,7 +713,7 @@ Web parity matrix: games=1080, wins=362, draws=718,
 rolls=93403, moves=71678, snapshots=238919, mismatches=0
 ```
 
-- [ ] **Step 6: Commit verified fixtures and replay harness**
+- [x] **Step 6: Commit verified fixtures and replay harness**
 
 ```bash
 git add web/scripts/export-python-fixtures.py web/fixtures web/tests/parity/replay.test.ts
@@ -723,7 +732,7 @@ git commit -m "test: prove full Python parity for web engine"
 - Consumes: engine, bot, commentary, RNG serialization
 - Produces: `MatchController`, `SavedMatch`, `saveMatch`, `loadMatch`, `clearMatch`, `MatchProvider`, `useMatch`
 
-- [ ] **Step 1: Write failing controller tests**
+- [x] **Step 1: Write failing controller tests**
 
 Use fake timers only in React scheduling tests; test the headless controller directly. Assert:
 
@@ -737,7 +746,7 @@ Use fake timers only in React scheduling tests; test the headless controller dir
 - draw and quit emit clean terminal events;
 - commentary switching does not change canonical state.
 
-- [ ] **Step 2: Run and observe failure**
+- [x] **Step 2: Run and observe failure**
 
 ```bash
 npm test -- tests/unit/controller.test.ts
@@ -745,13 +754,13 @@ npm test -- tests/unit/controller.test.ts
 
 Expected: FAIL because the controller is missing.
 
-- [ ] **Step 3: Implement the headless controller**
+- [x] **Step 3: Implement the headless controller**
 
 `MatchController` owns `game`, `pendingRoll`, `validMoves`, `previews`, `paused`, `autoplay`, `speed`, `commentaryMode`, and `eventCursor`. Implement `rollHuman`, `selectMove`, `runAutomatedTurn`, `step`, `setPaused`, `setSpeed`, `setCommentary`, `cycleCommentary`, `declareDraw`, `quit`, `getSnapshot`, `getPendingRoll`, `getValidMoves`, `getPreviews`, `getScheduleDelayMs`, and `drainCommentary`.
 
 `runAutomatedTurn` returns false when paused, terminal, human-controlled without autoplay, or awaiting a choice. Otherwise it rolls, records the bot decision, and applies the move exactly once.
 
-- [ ] **Step 4: Write failing persistence tests**
+- [x] **Step 4: Write failing persistence tests**
 
 ```ts
 const saved = saveMatch(controller);
@@ -762,15 +771,15 @@ expect(restored.getPendingRoll()).toBe(controller.getPendingRoll());
 
 Also assert schema mismatch, invalid RNG words, malformed config, oversized payload, and corrupt JSON return a typed invalid-save result without throwing.
 
-- [ ] **Step 5: Implement versioned persistence**
+- [x] **Step 5: Implement versioned persistence**
 
 Use key `ludo-showcase:match:v1`. Save schema version, timestamp, config, names/kinds through canonical players, canonical snapshot, RNG state, pending roll/choices, and UI preferences. Validate before use. Do not store credentials or send data externally. Import/export uses the same validated record and a 64 KiB limit.
 
-- [ ] **Step 6: Implement the React provider**
+- [x] **Step 6: Implement the React provider**
 
 `MatchProvider` owns one controller, subscribes React consumers to controller revisions, persists after each revision, and schedules automated turns with `setTimeout`. Clear timers on pause, unmount, terminal state, and controller replacement.
 
-- [ ] **Step 7: Verify**
+- [x] **Step 7: Verify**
 
 ```bash
 npm test -- tests/unit/controller.test.ts tests/unit/persistence.test.ts
@@ -779,7 +788,7 @@ npm run typecheck
 
 Expected: exit 0.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add web/src/match web/tests/unit/controller.test.ts web/tests/unit/persistence.test.ts
@@ -791,45 +800,45 @@ git commit -m "feat: add web match controller and recovery"
 ## Task 9: Build the Responsive Interface and Three.js Board
 
 **Files:**
-- Create: `web/app/layout.tsx`, `web/app/page.tsx`, `web/app/globals.css`, `web/app/error.tsx`
-- Create: `web/components/setup/SetupWizard.tsx`, `web/components/setup/JsonConfigPanel.tsx`
-- Create: `web/components/game/MatchHud.tsx`, `web/components/game/TokenChoiceList.tsx`
-- Create: `web/components/game/CommentaryPanel.tsx`, `web/components/game/PlaybackControls.tsx`
-- Create: `web/components/game/DrawDialog.tsx`, `web/components/game/QuitDialog.tsx`, `web/components/game/ResultPanel.tsx`
-- Create: `web/components/board/DomBoard.tsx`, `web/components/board/BoardCanvas.tsx`
+- Create: `web/src/app/layout.tsx`, `web/src/app/page.tsx`, `web/src/app/globals.css`, `web/src/app/error.tsx`
+- Create: `web/src/components/setup/SetupWizard.tsx`, `web/src/components/setup/JsonConfigPanel.tsx`
+- Create: `web/src/components/match/MatchHud.tsx`, `web/src/components/match/TokenChoiceList.tsx`
+- Create: `web/src/components/match/CommentaryPanel.tsx`, `web/src/components/match/PlaybackControls.tsx`
+- Create: `web/src/components/match/DrawDialog.tsx`, `web/src/components/match/QuitDialog.tsx`, `web/src/components/match/ResultPanel.tsx`
+- Create: `web/src/components/board/DomBoard.tsx`, `web/src/components/board/BoardCanvas.tsx`
 - Test: `web/tests/e2e/local-match.spec.ts`
 
 **Interfaces:**
 - Consumes: `MatchProvider`, canonical snapshot, previews, board view model
 - Produces: complete setup, match, result, resume, export, and fallback flows
 
-- [ ] **Step 1: Implement the visual system**
+- [x] **Step 1: Implement the visual system**
 
 Import self-hosted Manrope and Space Grotesk in `layout.tsx`. Define CSS variables for ink `#0B1020`, ivory `#F7F3EA`, gold `#D4A24C`, and the four Python player colors. Use CSS Modules for components, visible focus rings, 44×44 minimum targets, responsive desktop/tablet/mobile layouts, and `prefers-reduced-motion`.
 
-- [ ] **Step 2: Implement setup and resume**
+- [x] **Step 2: Implement setup and resume**
 
 `SetupWizard` controls mode, profile, player count, token count, names, human/bot seats, all seven boolean rule toggles, blockade mode, exact home, turn cap, seed, autoplay, speed, and commentary. `JsonConfigPanel` accepts drag/drop or file selection, caps size at 64 KiB, displays field errors, and imports existing presets. URL values override JSON, JSON overrides wizard, and wizard overrides defaults.
 
 If a valid save exists, show `Resume match` and `Start new match`; if invalid, explain the problem and offer `Reset saved data`.
 
-- [ ] **Step 3: Implement match HUD and accessible controls**
+- [x] **Step 3: Implement match HUD and accessible controls**
 
 `MatchHud` shows current player, turn count, status, captures, finished tokens, rule summary, last event, and finish order. `TokenChoiceList` renders one button per legal preview with token label, destination, capture names, safe status, wrap, home, and blockade facts. `PlaybackControls` provides Roll, Pause/Resume, Step, speed, autoplay, commentary, draw, quit, export, and Reset View. Terminal controls are disabled.
 
-- [ ] **Step 4: Implement draw and quit confirmation**
+- [x] **Step 4: Implement draw and quit confirmation**
 
 Use native `<dialog>` with focus restoration. Mutual draw asks every seat in order in local hot-seat play; a decline resumes the same turn without advancing. Quit requires confirmation and ends with `GAME_QUIT`.
 
-- [ ] **Step 5: Implement the semantic DOM board**
+- [x] **Step 5: Implement the semantic DOM board**
 
 `DomBoard` renders route cells, home lanes, yards, center, safe markers, and all player tokens from `buildGuiViewModel`. It uses semantic headings/status text and visible labels. It must remain complete when the canvas is absent.
 
-- [ ] **Step 6: Implement the Three.js presentation**
+- [x] **Step 6: Implement the Three.js presentation**
 
 `BoardCanvas` creates one reusable cell mesh system and one token group per marker. Map grid coordinates to an orthographic top-down scene. Use distinct token shapes per player, deterministic stack offsets, current-player and legal-destination highlights, and Reset View. Render only when the snapshot changes; do not run a perpetual decorative animation. Catch WebGL creation/context failures and set `webglAvailable=false` so `DomBoard` remains visible.
 
-- [ ] **Step 7: Write failing desktop/mobile E2E tests**
+- [x] **Step 7: Write failing desktop/mobile E2E tests**
 
 ```ts
 test("keyboard user can roll and choose a legal token", async ({ page }) => {
@@ -849,7 +858,7 @@ test("keyboard user can roll and choose a legal token", async ({ page }) => {
 
 Add tests for four-bot autoplay to terminal, pause/step, commentary, draw decline/accept, quit confirmation, JSON import, URL override, localStorage resume, corrupt save, result actions, mobile overflow, and WebGL fallback.
 
-- [ ] **Step 8: Run E2E and inspect real screenshots**
+- [x] **Step 8: Run E2E and inspect real screenshots**
 
 ```bash
 npx playwright install chromium
@@ -858,10 +867,10 @@ npm run test:e2e
 
 Open the dev server in a browser, inspect desktop and mobile screenshots, exercise keyboard and pointer paths, and fix visual or interaction defects. Do not claim visual success from unit tests alone.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
-git add web/app web/components web/tests/e2e/local-match.spec.ts
+git add web/src/app web/src/components web/tests/e2e/local-match.spec.ts
 git commit -m "feat: build responsive Ludo web interface"
 ```
 
@@ -879,7 +888,7 @@ git commit -m "feat: build responsive Ludo web interface"
 - Consumes: completed app and measured verification output
 - Produces: badges, Mermaid diagrams, deployment guide, release evidence, Vercel URL if deployment succeeds
 
-- [ ] **Step 1: Add automated accessibility tests**
+- [x] **Step 1: Add automated accessibility tests**
 
 ```ts
 import AxeBuilder from "@axe-core/playwright";
@@ -895,7 +904,7 @@ test("setup and match have no critical or serious violations", async ({ page }) 
 
 Also assert keyboard focus visibility, heading order, form labels, live regions, 44×44 targets, no color-only token distinction, reduced motion, and mobile reflow.
 
-- [ ] **Step 2: Run the complete release gate**
+- [x] **Step 2: Run the complete release gate**
 
 ```bash
 npm run lint
@@ -911,11 +920,11 @@ git diff --check
 
 Expected: every command exits 0; web parity prints zero mismatches; Python v1 remains unchanged and passing.
 
-- [ ] **Step 3: Update documentation with measured evidence only**
+- [x] **Step 3: Update documentation with measured evidence only**
 
 Add Next.js, TypeScript, React, Three.js, Vitest, Playwright, and Vercel badges. Add Mermaid architecture, user flow, state, automation, persistence, and future Render sequence diagrams. Record exact versions, commands, test counts, parity totals, browser viewports, accessibility result, and deployment status. Update `docs/06_v3_web_build_plan.md` from future-plan status to the implemented local-first release with online rooms explicitly deferred.
 
-- [ ] **Step 4: Validate documentation**
+- [x] **Step 4: Validate documentation**
 
 Run a local-link/code-fence/unfinished-marker scan across current docs. Peer templates and intentionally blank future fields are excluded. `git diff --check` must pass.
 

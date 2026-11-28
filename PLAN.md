@@ -5,8 +5,8 @@
 Build and verify one complete Ludo showcase in two authentic programming
 paradigms while preserving exact behavioral parity. Deliver a full-feature
 `v1_initial/` for peer testing, reserve `v2_final/` for real peer-driven fixes,
-and provide an executable plan for a future browser implementation without
-building that web application yet.
+and implement the approved local-first browser release under `web/` with a
+future online-room design kept separate.
 
 ## Current Status
 
@@ -18,6 +18,10 @@ building that web application yet.
 | Bots, CLI, wizard, JSON, autoplay, and Tkinter GUI | Complete |
 | Unit, parity, subprocess, AST, and import gates | Complete: full v1 gate observed at exit 0, zero warnings |
 | Current architecture documentation and v3 plan | Complete |
+| v3 local-first web implementation | Complete: 141 Vitest tests and 50 browser tests passed |
+| Web Python parity | Complete: 1,080 games, 238,919 snapshots, zero mismatches |
+| Web accessibility automation | Complete: axe, keyboard, focus, contrast, reduced motion, fallback |
+| GitHub push and Vercel production release | Pending reviewed release step |
 | Human peer testing | Pending real external testers |
 | Peer-driven v2 changes | Not started; `v2_final/` remains reserved |
 | Final submission gate | Pending genuine peer reports and v2 fixes |
@@ -25,10 +29,12 @@ building that web application yet.
 ## Non-Goals
 
 - No third-party Python dependencies.
-- No web application in this delivery; v3 is a plan only.
+- No online accounts, matchmaking, database, analytics payload, or deployed
+  backend in v3.0.
 - No fabricated peer reports or invented peer-feedback improvements.
-- No shared rule engine disguised as two implementations.
-- No automatic commits, pushes, or deployment.
+- No shared Python rule engine disguised as two implementations.
+- No automatic force-push, history rewrite, or deployment claim without
+  observed evidence.
 
 ## Binding Constraints
 
@@ -46,6 +52,17 @@ building that web application yet.
 9. `v1_initial/` becomes immutable after handoff; accepted peer fixes go to
    `v2_final/` with a changelog.
 10. Every success claim requires an observed command result.
+11. `web/src/game/` must not import React, Next.js, DOM, or Three.js APIs.
+12. Web geometry stays locked and every movement/rendering value derives from
+    validated configuration.
+13. Web seeded dice must match CPython 3.11 integer-seed MT19937 output.
+14. Canonical web snapshots and event payloads must match Python; RNG internals
+    remain outside canonical snapshots.
+15. Browser storage is local-only in v3.0; no credentials or match data are sent
+    to a backend.
+16. Every gameplay action remains available through semantic DOM controls;
+    Three.js is optional presentation.
+17. No emojis; use technology badges and Mermaid diagrams where useful.
 
 ## Approved Rule Decisions
 
@@ -122,6 +139,22 @@ The wizard asks only unresolved values. Locked geometry is never overridden.
 The Tkinter GUI calls a headless GUI controller. Automated timing uses Tkinter
 `after()` scheduling only. Pause blocks scheduling; Step remains available.
 Canonical rules never depend on widgets or wall-clock timing.
+
+### Web v3 architecture
+
+`web/src/game/` is a framework-independent TypeScript port of the canonical
+rules contract. `MatchController` owns gameplay transitions, pending choices,
+playback state, and revisions. `MatchProvider` subscribes React, persists each
+revision, and schedules at most one automated action.
+
+The semantic DOM board is always mounted. Three.js adds an optional
+presentation layer and cannot become the only way to play. Versioned
+localStorage stores canonical state, RNG state, pending choices, configuration,
+and preferences after whole-record validation.
+
+Python remains an offline oracle. Committed fixtures reproduce CPython-compatible
+dice streams and 1,080 complete games. Vercel is the approved frontend host;
+Render is reserved for a future server-authoritative WebSocket room service.
 
 ## Requirement-to-Evidence Map
 
@@ -232,6 +265,23 @@ Canonical rules never depend on widgets or wall-clock timing.
 - [ ] Run `python scripts/verify_gates.py --stage final`.
 - [ ] Require exit 0 and zero warnings before claiming final completion.
 
+### Phase 9 — v3 Local-First Web Release
+
+- [x] Approve the local-first architecture and Vercel/future-Render boundary.
+- [x] Implement strict TypeScript contracts, CPython-compatible RNG, geometry,
+  rules, bots, and commentary.
+- [x] Replay all 1,080 Python oracle games with zero mismatches.
+- [x] Implement controller, timer scheduling, persistence, setup, match, result,
+  draw, quit, import/export, and recovery flows.
+- [x] Implement the semantic DOM board and optional Three.js presentation.
+- [x] Pass desktop/mobile functional and accessibility browser suites.
+- [x] Add technology badges, Mermaid diagrams, architecture, user-flow, and
+  deployment documentation.
+- [ ] Review and commit the complete release source.
+- [ ] Push the reviewed commit to `msvignesh01/ludo-cli` without force-push.
+- [ ] Deploy to Vercel with root directory `web/` and smoke-test production.
+- [x] Keep online rooms and Render deployment explicitly deferred.
+
 ## Verification Protocol
 
 For every implementation change:
@@ -262,15 +312,15 @@ replace it for rule, state, or engine changes.
 
 ## v3 Boundary
 
-`docs/06_v3_web_build_plan.md` is the executable browser plan. Its architecture
-is a pure TypeScript rules core, React/Next.js controller and UI, Three.js
-presentation-only board, accessible DOM fallback, and Python-generated offline
-fixtures. Exact seeded parity requires a CPython-compatible MT19937 and integer
-selection behavior.
+The approved browser application is implemented under `web/`. Its pure
+TypeScript rules core, React controller, optional Three.js board, semantic DOM
+fallback, Python-generated fixtures, and Vercel deployment path are documented
+in `docs/06_v3_web_build_plan.md` through `docs/09_deployment.md`.
 
-This project plan does not authorize creating or deploying that application.
-Any future v3 implementation must follow its own approval and verification
-cycle.
+v3.0 is local hot-seat play only. Online rooms require a separate approved,
+server-authoritative phase with RNG and action validation on the server. The
+current local client is not an anti-cheat boundary and no Render backend is
+deployed.
 
 ## Definition of Done
 
